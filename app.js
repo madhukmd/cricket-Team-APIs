@@ -46,8 +46,8 @@ app.get("/players/", async (request, response) => {
 
 //API 2
 app.post("/players/", async (request, response) => {
-  const palyerdatails = request.body;
-  const { playerName, jerseyNumber, role } = palyerdatails;
+  const playerdetails = request.body;
+  const { playerName, jerseyNumber, role } = playerdetails;
 
   const addPlayerQuery = `
     INSERT INTO
@@ -56,7 +56,7 @@ app.post("/players/", async (request, response) => {
       (
         '${playerName}',
          ${jerseyNumber},
-        '${role}',
+        '${role}'
       );`;
   const dbResponse = await db.run(addPlayerQuery);
   const playerId = dbResponse.lastID;
@@ -68,8 +68,7 @@ app.get("/players/:playerId/", async (request, response) => {
   const { playerId } = request.params;
   const getPlayerQuery = `SELECT * FROM cricket_team WHERE player_id=${playerId}`;
   const player = await db.get(getPlayerQuery);
-  const playerDT = [player];
-  response.send(playerDT.map((list) => convertList(list)));
+  response.send(convertList(player));
 });
 
 //API 4
