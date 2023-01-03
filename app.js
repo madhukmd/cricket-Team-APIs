@@ -45,7 +45,6 @@ app.get("/players/", async (request, response) => {
 });
 
 //API 2
-
 app.post("/players/", async (request, response) => {
   const palyerdatails = request.body;
   const { playerName, jerseyNumber, role } = palyerdatails;
@@ -68,9 +67,7 @@ app.post("/players/", async (request, response) => {
 app.get("/players/:playerId/", async (request, response) => {
   const { playerId } = request.params;
   const getPlayerQuery = `SELECT * FROM cricket_team WHERE player_id=${playerId}`;
-
   const player = await db.get(getPlayerQuery);
-  console.log(player);
   const playerDT = [player];
   response.send(playerDT.map((list) => convertList(list)));
 });
@@ -78,6 +75,8 @@ app.get("/players/:playerId/", async (request, response) => {
 //API 4
 app.put("/players/:playerId/", async (request, response) => {
   const { playerId } = request.params;
+  const playerdetails = request.body;
+  const { playerName, jerseyNumber, role } = playerdetails;
 
   const updatePlayerQuery = `UPDATE  cricket_team SET 
   player_name = "${playerName}",
@@ -86,7 +85,7 @@ app.put("/players/:playerId/", async (request, response) => {
 WHERE player_id=${playerId}`;
 
   const updatePlayer = await db.run(updatePlayerQuery);
-  reponse.send("Player Details Updated");
+  response.send("Player Details Updated");
 });
 
 //API 5
